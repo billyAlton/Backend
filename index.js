@@ -10,6 +10,10 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
+// --- Import des routes ---
+const eventRoutes = require("./routes/event.routes");
+app.use("/api/events", eventRoutes);
+
 // Exemple de route
 app.get('/', (req, res) => {
   res.json({ message: 'Bienvenue sur le backend Node.js 🚀' });
