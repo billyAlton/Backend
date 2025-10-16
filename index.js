@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 // --- Import des routes ---
-const eventRoutes = require("./routes/event.routes");
+const eventRoutes = require("./src/routes/event.route");
 app.use("/api/events", eventRoutes);
 
 // Exemple de route
