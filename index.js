@@ -1,7 +1,7 @@
 const express = require ('express');
 const  cors = require ('cors');
 const dotenv = require ('dotenv');
-
+const path = require("path");
 dotenv.config();
 const app = express();
 const connectDB = require('./config/db');
@@ -9,6 +9,8 @@ connectDB();
 
 app.use(cors());
 app.use(express.json());
+
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // --- Import des routes ---
 const eventRoutes = require("./src/routes/event.route");
