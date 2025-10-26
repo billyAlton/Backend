@@ -1,5 +1,6 @@
 const Event = require("../models/event");
 
+
 const fs = require("fs");
 
 // 🟢 Créer un événement
@@ -91,7 +92,7 @@ exports.updateEvent = async (req, res) => {
 // 🔵 Lister tous les événements
 exports.getEvents = async (req, res) => {
   try {
-    const events = await Event.find().sort({ start_date: 1 });
+    const events = await Event.find().sort({ creaatedAt: -1 });
     res.json(events);
   } catch (err) {
     res.status(500).json({ message: err.message });
