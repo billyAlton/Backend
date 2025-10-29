@@ -14,6 +14,9 @@ const eventSchema = new mongoose.Schema(
     location: { type: String },
     max_attendees: { type: Number },
     created_by: { type: String, required: true }, // ou ObjectId si tu veux relier à un User
+    images: [{ 
+      type: String // URLs des images
+    }],
   },
   { timestamps: true }
 );
