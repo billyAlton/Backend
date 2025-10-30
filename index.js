@@ -14,7 +14,11 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // --- Import des routes ---
 const eventRoutes = require("./src/routes/event.route");
+const sermonRoutes = require('./src/routes/sermon.route');
+
+
 app.use("/api/events", eventRoutes);
+app.use("/api/sermons", sermonRoutes);
 
 // Exemple de route
 app.get('/', (req, res) => {
