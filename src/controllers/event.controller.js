@@ -56,7 +56,7 @@ exports.createEvent = async (req, res) => {
   }
 };
 
-// 🟡 Modifier un événement
+//  Modifier un événement
 exports.updateEvent = async (req, res) => {
   try {
     const eventData = { ...req.body };
@@ -89,7 +89,7 @@ exports.updateEvent = async (req, res) => {
   }
 };
 
-// 🔵 Lister tous les événements
+//  Lister tous les événements
 exports.getEvents = async (req, res) => {
   try {
     const events = await Event.find().sort({ creaatedAt: -1 });
@@ -99,7 +99,7 @@ exports.getEvents = async (req, res) => {
   }
 };
 
-// 🟠 Récupérer un seul événement
+//  Récupérer un seul événement
 exports.getEventById = async (req, res) => {
   try {
     const event = await Event.findById(req.params.id);
@@ -110,7 +110,7 @@ exports.getEventById = async (req, res) => {
   }
 };
 
-// 🔴 Supprimer un événement
+//  Supprimer un événement
 exports.deleteEvent = async (req, res) => {
   try {
     const event = await Event.findByIdAndDelete(req.params.id);
