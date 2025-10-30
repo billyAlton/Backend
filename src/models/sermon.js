@@ -63,9 +63,8 @@ const sermonSchema = new mongoose.Schema({
     trim: true
   }],
   created_by: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: [true, 'L\'utilisateur créateur est requis'],
-    ref: 'User' // Si vous avez un modèle User
+    type: String,
+    required: [true, 'L\'utilisateur créateur est requis']
   }
 }, {
   timestamps: true // Crée automatiquement createdAt et updatedAt

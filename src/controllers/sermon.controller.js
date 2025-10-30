@@ -49,7 +49,7 @@ class SermonController {
         transcript: transcript || null,
         series: series || null,
         tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
-        created_by: req.user.id,
+        created_by: req.user.email,
       });
 
       await sermon.save();
