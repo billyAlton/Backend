@@ -253,7 +253,7 @@ class SermonController {
       }
 
       // Vérifier les permissions
-      if (sermon.created_by.toString() !== req.user.id && !req.user.isAdmin) {
+      if (sermon.created_by.toString() !== req.user.email && !req.user.isAdmin) {
         return res.status(403).json({
           success: false,
           message: 'Non autorisé à supprimer ce sermon',
