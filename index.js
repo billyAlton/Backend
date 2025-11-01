@@ -17,12 +17,14 @@ const eventRoutes = require("./src/routes/event.route");
 const sermonRoutes = require('./src/routes/sermon.route');
 const prayerRoutes = require('./src/routes/prayer.route');
 const blogRoutes = require('./src/routes/blog.route');
+const donationRoutes = require('./src/routes/donation.route');
 
 
 app.use("/api/events", eventRoutes);
 app.use("/api/sermons", sermonRoutes);
 app.use("/api/prayers", prayerRoutes);
 app.use("/api/blogs", blogRoutes);
+app.use("/api/donations", donationRoutes);
 
 // Exemple de route
 app.get('/', (req, res) => {
