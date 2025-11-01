@@ -1,5 +1,5 @@
 // controllers/donation.controller.js
-const Donation = require('../models/Donation');
+const Donation = require('../models/donation');
 const { validationResult } = require('express-validator');
 
 class DonationController {

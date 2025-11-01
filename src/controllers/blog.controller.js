@@ -1,9 +1,9 @@
 // controllers/blogPost.controller.js
-const BlogPost = require('../models/BlogPost');
+const BlogPost = require('../models/blogPost');
 const { validationResult } = require('express-validator');
 
 class BlogController {
-  // 🟢 Créer un nouvel article
+  // Créer un nouvel article
   async createBlogPost(req, res) {
     try {
       // Validation des données
@@ -90,7 +90,7 @@ class BlogController {
     }
   }
 
-  // 🟠 Mettre à jour un article
+  // Mettre à jour un article
   async updateBlogPost(req, res) {
     try {
       const errors = validationResult(req);
@@ -157,7 +157,7 @@ class BlogController {
         id,
         updateData,
         { new: true, runValidators: true }
-      ).populate('author_id', 'name email');
+      );
 
       return res.json({
         success: true,
