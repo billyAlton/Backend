@@ -3,7 +3,7 @@ const PrayerRequest = require('../models/prayerRequest');
 const { validationResult } = require('express-validator');
 
 class PrayerRequestController {
-  // 🟢 Créer une nouvelle demande de prière
+  // Créer une nouvelle demande de prière
   async createPrayerRequest(req, res) {
     try {
       // Validation des données
@@ -24,6 +24,7 @@ class PrayerRequestController {
         is_anonymous,
         is_public,
       } = req.body;
+      const { id } = req.params;
 
       // Vérifier si l'utilisateur est authentifié
       if (!req.user || !req.user.id) {
@@ -38,7 +39,7 @@ class PrayerRequestController {
         title,
         description,
         requester_name: is_anonymous ? null : (requester_name || null),
-        requester_id: req.user.id,
+        requester_id: req.user.email,
         status: status || 'active',
         is_anonymous: is_anonymous || false,
         is_public: is_public !== undefined ? is_public : true,
@@ -161,7 +162,7 @@ class PrayerRequestController {
     }
   }
 
-  // 🟣 Récupérer toutes les demandes de prière
+  //  Récupérer toutes les demandes de prière
   async getAllPrayerRequests(req, res) {
     try {
       const { status, is_public, page = 1, limit = 10 } = req.query;
@@ -176,7 +177,6 @@ class PrayerRequestController {
         .sort({ createdAt: -1 })
         .limit(limit * 1)
         .skip((page - 1) * limit)
-        .populate('requester_id', 'name email');
 
       const total = await PrayerRequest.countDocuments(filter);
 

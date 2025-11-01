@@ -19,7 +19,7 @@ const prayerRequestSchema = new mongoose.Schema({
     trim: true
   },
   requester_id: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,
     required: [true, 'L\'ID du demandeur est requis'],
     ref: 'User'
   },
