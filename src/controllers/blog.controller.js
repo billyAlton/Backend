@@ -123,7 +123,7 @@ class BlogController {
       }
 
       // Vérifier les permissions (seul l'auteur ou un admin peut modifier)
-      if (blogPost.author_id.toString() !== req.user.id && !req.user.isAdmin) {
+      if (blogPost.author.toString() !== req.user.email && !req.user.isAdmin) {
         return res.status(403).json({
           success: false,
           message: 'Non autorisé à modifier cet article',
@@ -248,10 +248,10 @@ class BlogController {
   // 🟣 Récupérer un article par ID
   async getBlogPostById(req, res) {
     try {
-      const { id } = req.params.id;
+      const { id } = req.params;
+      console.log("ID ", id)
       
       const blogPost = await BlogPost.findById(id)
-        .populate('author_id', 'name email');
 
       if (!blogPost) {
         return res.status(404).json({
