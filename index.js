@@ -16,11 +16,13 @@ app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 const eventRoutes = require("./src/routes/event.route");
 const sermonRoutes = require('./src/routes/sermon.route');
 const prayerRoutes = require('./src/routes/prayer.route');
+const blogRoutes = require('./src/routes/blog.route');
 
 
 app.use("/api/events", eventRoutes);
 app.use("/api/sermons", sermonRoutes);
 app.use("/api/prayers", prayerRoutes);
+app.use("/api/blogs", blogRoutes);
 
 // Exemple de route
 app.get('/', (req, res) => {
