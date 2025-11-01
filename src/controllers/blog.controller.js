@@ -335,7 +335,7 @@ class BlogController {
       }
 
       // Vérifier les permissions
-      if (blogPost.author_id.toString() !== req.user.id && !req.user.isAdmin) {
+      if (blogPost.author.toString() !== req.user.email && !req.user.isAdmin) {
         return res.status(403).json({
           success: false,
           message: 'Non autorisé à supprimer cet article',
