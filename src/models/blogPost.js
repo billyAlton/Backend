@@ -51,10 +51,9 @@ const blogPostSchema = new mongoose.Schema({
     type: String,
     trim: true
   }],
-  author_id: {
-    type: mongoose.Schema.Types.ObjectId,
+  author: {
+    type: String,
     required: [true, 'L\'auteur est requis'],
-    ref: 'User'
   },
   published_at: {
     type: Date,

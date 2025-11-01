@@ -52,7 +52,7 @@ class BlogController {
         featured_image: featured_image || null,
         status: status || 'draft',
         tags: tags ? tags.split(',').map(tag => tag.trim()) : [],
-        author_id: req.user.id,
+        author: req.user.email,
       });
 
       await blogPost.save();
@@ -215,11 +215,10 @@ class BlogController {
       
       // Filtres optionnels
       if (status) filter.status = status;
-      if (author) filter.author_id = author;
+      if (author) filter.author = author;
       if (tag) filter.tags = { $in: [tag] };
       
       const blogPosts = await BlogPost.find(filter)
-        .populate('author_id', 'name email')
         .sort(sort)
         .limit(limit * 1)
         .skip((page - 1) * limit);
