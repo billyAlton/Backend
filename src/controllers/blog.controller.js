@@ -249,7 +249,7 @@ class BlogController {
   // 🟣 Récupérer un article par ID
   async getBlogPostById(req, res) {
     try {
-      const { id } = req.params;
+      const { id } = req.params.id;
       
       const blogPost = await BlogPost.findById(id)
         .populate('author_id', 'name email');
