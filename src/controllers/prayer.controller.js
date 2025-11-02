@@ -206,7 +206,6 @@ class PrayerRequestController {
       const { id } = req.params;
       
       const prayerRequest = await PrayerRequest.findById(id)
-        .populate('requester_id', 'name email');
 
       if (!prayerRequest) {
         return res.status(404).json({
