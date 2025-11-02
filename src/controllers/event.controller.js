@@ -60,6 +60,7 @@ exports.createEvent = async (req, res) => {
 exports.updateEvent = async (req, res) => {
   try {
     const eventData = { ...req.body };
+    console.log("Body : ",req.body);
 
     // Ajouter les nouvelles images si présentes
     if (req.files && req.files.length > 0) {

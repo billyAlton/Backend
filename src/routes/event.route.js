@@ -7,7 +7,7 @@ const upload = require("../middleware/upload");
 router.post("/create",upload.array("images", 10), eventController.createEvent);
 router.get("/get", eventController.getEvents);
 router.get("/getone/:id", eventController.getEventById);
-router.put("/update/:id", eventController.updateEvent);
+router.put("/update/:id",upload.array("images", 10), eventController.updateEvent);
 router.delete("/delete/:id", eventController.deleteEvent);
 
 module.exports = router;
