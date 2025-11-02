@@ -251,7 +251,7 @@ class PrayerRequestController {
       }
 
       // Vérifier les permissions
-      if (prayerRequest.requester_id.toString() !== req.user.id && !req.user.isAdmin) {
+      if (prayerRequest.requester_id.toString() !== req.user.email && !req.user.isAdmin) {
         return res.status(403).json({
           success: false,
           message: 'Non autorisé à supprimer cette demande de prière',
