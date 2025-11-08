@@ -1,8 +1,36 @@
 // middleware/validation.js
+// middleware/validation.js
 const { body, param, query, validationResult } = require('express-validator');
 
-// Validation pour la soumission d'un témoignage
+// Middleware pour parser FormData avant validation
+// middleware/testimonyValidation.js
+const handleFormData = (req, res, next) => {
+  // Vérifier si req.body existe
+  if (!req.body) {
+    return res.status(400).json({
+      success: false,
+      message: 'Données de formulaire manquantes'
+    });
+  }
+
+  // Si des fichiers sont uploadés, req.body contient les champs texte
+  // On s'assure que les champs sont bien traités comme des strings
+  if (req.is('multipart/form-data')) {
+    // Vérifier chaque champ individuellement
+    const fields = ['title', 'content', 'author_name', 'author_email', 'author_location', 'category'];
+    
+    fields.forEach(field => {
+      if (req.body[field]) {
+        req.body[field] = req.body[field].toString();
+      }
+    });
+  }
+  next();
+};
+
+// Validation pour la soumission d'un témoignage (support FormData)
 const validateTestimonySubmission = [
+  handleFormData, // Ajouter ce middleware en premier
   body('title')
     .trim()
     .notEmpty()
@@ -47,6 +75,8 @@ const validateTestimonySubmission = [
     .isIn(['guerison', 'famille', 'finances', 'delivrance', 'miracle', 'transformation', 'autre'])
     .withMessage('Catégorie invalide')
 ];
+
+// ... le reste de votre code validation reste inchangé
 
 // Validation pour la mise à jour du statut (admin)
 const validateTestimonyStatusUpdate = [

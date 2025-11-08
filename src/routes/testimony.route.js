@@ -1,35 +1,37 @@
 // routes/testimony.route.js (version simplifiée)
-const express = require('express');
+const express = require("express");
 const {
   submitTestimony,
   getApprovedTestimonies,
   getAllTestimonies,
   updateTestimonyStatus,
   deleteTestimony,
-  getTestimonyStats
-} = require('../controllers/testimony.controller');
-const authMiddleware = require('../middleware/auth');
+  getTestimonyStats,
+} = require("../controllers/testimony.controller");
+const authMiddleware = require("../middleware/auth");
+const uploadTestimony = require("../middleware/uploadTestimony");
 const {
   validateTestimonySubmission,
   validateTestimonyStatusUpdate,
   validatePublicQueryParams,
   validateAdminQueryParams,
   validateTestimonyId,
-  handleValidationErrors
-} = require('../middleware/testimonyValidation');
+  handleValidationErrors,
+} = require("../middleware/testimonyValidation");
 
 const router = express.Router();
 
 // Routes publiques
 router.post(
-  '/submit',
+  "/submit",
+  uploadTestimony.array("images", 3),
   validateTestimonySubmission,
   handleValidationErrors,
   submitTestimony
 );
 
 router.get(
-  '/public',
+  "/public",
   validatePublicQueryParams,
   handleValidationErrors,
   getApprovedTestimonies
@@ -37,13 +39,13 @@ router.get(
 
 // Routes admin - version avec vérification de rôle intégrée
 router.get(
-  '/admin',
+  "/admin",
   authMiddleware,
   (req, res, next) => {
-    if (req.user.role !== 'admin' && req.user.role !== 'super_admin') {
+    if (req.user.role !== "admin" && req.user.role !== "super_admin") {
       return res.status(403).json({
         success: false,
-        message: 'Accès non autorisé'
+        message: "Accès non autorisé",
       });
     }
     next();
@@ -54,13 +56,13 @@ router.get(
 );
 
 router.get(
-  '/admin/stats',
+  "/admin/stats",
   authMiddleware,
   (req, res, next) => {
-    if (req.user.role !== 'admin' && req.user.role !== 'super_admin') {
+    if (req.user.role !== "admin" && req.user.role !== "super_admin") {
       return res.status(403).json({
         success: false,
-        message: 'Accès non autorisé'
+        message: "Accès non autorisé",
       });
     }
     next();
@@ -69,13 +71,13 @@ router.get(
 );
 
 router.put(
-  '/admin/:id/status',
+  "/admin/:id/status",
   authMiddleware,
   (req, res, next) => {
-    if (req.user.role !== 'admin' && req.user.role !== 'super_admin') {
+    if (req.user.role !== "admin" && req.user.role !== "super_admin") {
       return res.status(403).json({
         success: false,
-        message: 'Accès non autorisé'
+        message: "Accès non autorisé",
       });
     }
     next();
@@ -86,13 +88,13 @@ router.put(
 );
 
 router.delete(
-  '/admin/:id',
+  "/admin/:id",
   authMiddleware,
   (req, res, next) => {
-    if (req.user.role !== 'admin' && req.user.role !== 'super_admin') {
+    if (req.user.role !== "admin" && req.user.role !== "super_admin") {
       return res.status(403).json({
         success: false,
-        message: 'Accès non autorisé'
+        message: "Accès non autorisé",
       });
     }
     next();

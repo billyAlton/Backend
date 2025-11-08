@@ -2,12 +2,20 @@
 const Testimony = require('../models/testimony');
 const { validationResult } = require('express-validator');
 
-// Soumettre un témoignage (public)
+const path = require('path');
+
+// Soumettre un témoignage (public) - VERSION MODIFIÉE
 const submitTestimony = async (req, res) => {
   try {
     // Vérifier les erreurs de validation
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
+      // Si il y a des erreurs de validation, supprimer les fichiers uploadés
+      if (req.files && req.files.length > 0) {
+        req.files.forEach(file => {
+          fs.unlinkSync(file.path);
+        });
+      }
       return res.status(400).json({
         success: false,
         message: 'Données de validation invalides',
@@ -33,9 +41,24 @@ const submitTestimony = async (req, res) => {
     });
 
     if (recentSubmissions >= 3) {
+      // Supprimer les fichiers uploadés si limite atteinte
+      if (req.files && req.files.length > 0) {
+        req.files.forEach(file => {
+          fs.unlinkSync(file.path);
+        });
+      }
       return res.status(429).json({
         success: false,
         message: 'Vous avez soumis trop de témoignages récemment. Veuillez réessayer demain.'
+      });
+    }
+
+    // Traiter les images uploadées
+    let images = [];
+    if (req.files && req.files.length > 0) {
+      images = req.files.map(file => {
+        // Retourner le chemin relatif ou l'URL selon votre configuration
+        return `/uploads/testimonies/${path.basename(file.filename)}`;
       });
     }
 
@@ -46,7 +69,8 @@ const submitTestimony = async (req, res) => {
       author_email,
       author_location,
       category: category || 'autre',
-      status: 'pending'
+      status: 'pending',
+      images // Ajouter les images au témoignage
     });
 
     await testimony.save();
@@ -57,10 +81,17 @@ const submitTestimony = async (req, res) => {
       data: {
         id: testimony._id,
         title: testimony.title,
-        status: testimony.status
+        status: testimony.status,
+        images: testimony.images
       }
     });
   } catch (error) {
+    // En cas d'erreur, supprimer les fichiers uploadés
+    if (req.files && req.files.length > 0) {
+      req.files.forEach(file => {
+        fs.unlinkSync(file.path);
+      });
+    }
     console.error('Erreur soumission témoignage:', error);
     res.status(500).json({
       success: false,
@@ -69,7 +100,7 @@ const submitTestimony = async (req, res) => {
   }
 };
 
-// Récupérer les témoignages approuvés (public)
+// Récupérer les témoignages approuvés (public) - VERSION MODIFIÉE
 const getApprovedTestimonies = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -101,11 +132,26 @@ const getApprovedTestimonies = async (req, res) => {
       .limit(parseInt(limit))
       .select('-author_email -approved_by');
 
+    // Transformer les chemins d'images en URLs complètes si nécessaire
+    const testimoniesWithFullImageUrls = testimonies.map(testimony => {
+      const testimonyObj = testimony.toObject();
+      if (testimonyObj.images && testimonyObj.images.length > 0) {
+        testimonyObj.images = testimonyObj.images.map(image => {
+          // Si c'est un chemin relatif, le convertir en URL absolue
+          if (image.startsWith('/uploads/')) {
+            return `${req.protocol}://${req.get('host')}${image}`;
+          }
+          return image;
+        });
+      }
+      return testimonyObj;
+    });
+
     const total = await Testimony.countDocuments(query);
 
     res.json({
       success: true,
-      data: testimonies,
+      data: testimoniesWithFullImageUrls,
       pagination: {
         page: parseInt(page),
         limit: parseInt(limit),
@@ -122,7 +168,7 @@ const getApprovedTestimonies = async (req, res) => {
   }
 };
 
-// Admin: Récupérer tous les témoignages
+// Admin: Récupérer tous les témoignages - VERSION MODIFIÉE
 const getAllTestimonies = async (req, res) => {
   try {
     const errors = validationResult(req);
@@ -154,11 +200,25 @@ const getAllTestimonies = async (req, res) => {
       .limit(parseInt(limit))
       .populate('approved_by', 'name email');
 
+    // Transformer les chemins d'images en URLs complètes
+    const testimoniesWithFullImageUrls = testimonies.map(testimony => {
+      const testimonyObj = testimony.toObject();
+      if (testimonyObj.images && testimonyObj.images.length > 0) {
+        testimonyObj.images = testimonyObj.images.map(image => {
+          if (image.startsWith('/uploads/')) {
+            return `${req.protocol}://${req.get('host')}${image}`;
+          }
+          return image;
+        });
+      }
+      return testimonyObj;
+    });
+
     const total = await Testimony.countDocuments(query);
 
     res.json({
       success: true,
-      data: testimonies,
+      data: testimoniesWithFullImageUrls,
       pagination: {
         page: parseInt(page),
         limit: parseInt(limit),
@@ -174,6 +234,7 @@ const getAllTestimonies = async (req, res) => {
     });
   }
 };
+
 
 // Admin: Modifier le statut d'un témoignage
 const updateTestimonyStatus = async (req, res) => {
