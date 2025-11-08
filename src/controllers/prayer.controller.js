@@ -105,7 +105,7 @@ class PrayerRequestController {
       }
 
       // Vérifier les permissions (seul le créateur ou un admin peut modifier)
-      if (prayerRequest.requester_id.toString() !== req.user.id && !req.user.isAdmin) {
+      if (prayerRequest.requester_id.toString() !== req.user.email && !req.user.isAdmin) {
         return res.status(403).json({
           success: false,
           message: 'Non autorisé à modifier cette demande de prière',
@@ -206,7 +206,7 @@ class PrayerRequestController {
       const { id } = req.params;
       
       const prayerRequest = await PrayerRequest.findById(id)
-        .populate('requester_id', 'name email');
+
 
       if (!prayerRequest) {
         return res.status(404).json({
@@ -252,7 +252,7 @@ class PrayerRequestController {
       }
 
       // Vérifier les permissions
-      if (prayerRequest.requester_id.toString() !== req.user.id && !req.user.isAdmin) {
+      if (prayerRequest.requester_id.toString() !== req.user.email && !req.user.isAdmin) {
         return res.status(403).json({
           success: false,
           message: 'Non autorisé à supprimer cette demande de prière',
