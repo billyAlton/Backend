@@ -198,7 +198,6 @@ const getAllTestimonies = async (req, res) => {
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(parseInt(limit))
-      .populate('approved_by', 'name email');
 
     // Transformer les chemins d'images en URLs complètes
     const testimoniesWithFullImageUrls = testimonies.map(testimony => {
