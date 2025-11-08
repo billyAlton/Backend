@@ -207,7 +207,6 @@ class PrayerRequestController {
       
       const prayerRequest = await PrayerRequest.findById(id)
 
-
       if (!prayerRequest) {
         return res.status(404).json({
           success: false,

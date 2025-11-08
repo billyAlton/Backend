@@ -60,6 +60,7 @@ exports.createEvent = async (req, res) => {
 exports.updateEvent = async (req, res) => {
   try {
     const eventData = { ...req.body };
+    console.log("Body : ",req.body);
 
     // Ajouter les nouvelles images si présentes
     if (req.files && req.files.length > 0) {
@@ -92,7 +93,7 @@ exports.updateEvent = async (req, res) => {
 //  Lister tous les événements
 exports.getEvents = async (req, res) => {
   try {
-    const events = await Event.find().sort({ creaatedAt: -1 });
+    const events = await Event.find().sort({ createdAt: -1 });
     res.json(events);
   } catch (err) {
     res.status(500).json({ message: err.message });
