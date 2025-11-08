@@ -19,6 +19,7 @@ const prayerRoutes = require('./src/routes/prayer.route');
 const blogRoutes = require('./src/routes/blog.route');
 const donationRoutes = require('./src/routes/donation.route');
 const memberRoutes = require('./src/routes/member.route');
+const testimonyRoutes = require('./src/routes/testimony.route');
 
 
 app.use("/api/events", eventRoutes);
@@ -27,6 +28,8 @@ app.use("/api/prayers", prayerRoutes);
 app.use("/api/blogs", blogRoutes);
 app.use("/api/donations", donationRoutes);
 app.use("/api/members", memberRoutes);
+app.use('/api/testimonies', testimonyRoutes);
+
 
 // Exemple de route
 app.get('/', (req, res) => {
