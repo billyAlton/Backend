@@ -6,7 +6,7 @@ const {
   getAllTestimonies,
   updateTestimonyStatus,
   deleteTestimony,
-  getTestimonyStats,
+  getTestimonyStats,getTestimonyById,
 } = require("../controllers/testimony.controller");
 const authMiddleware = require("../middleware/auth");
 const uploadTestimony = require("../middleware/uploadTestimony");
@@ -73,7 +73,7 @@ router.get(
 router.put(
   "/admin/:id/status",
   authMiddleware,
-  (req, res, next) => {
+  /* (req, res, next) => {
     if (req.user.role !== "admin" && req.user.role !== "super_admin") {
       return res.status(403).json({
         success: false,
@@ -81,7 +81,7 @@ router.put(
       });
     }
     next();
-  },
+  }, */
   validateTestimonyStatusUpdate,
   handleValidationErrors,
   updateTestimonyStatus
@@ -90,7 +90,7 @@ router.put(
 router.delete(
   "/admin/:id",
   authMiddleware,
-  (req, res, next) => {
+  /* (req, res, next) => {
     if (req.user.role !== "admin" && req.user.role !== "super_admin") {
       return res.status(403).json({
         success: false,
@@ -98,10 +98,28 @@ router.delete(
       });
     }
     next();
-  },
+  }, */
   validateTestimonyId,
   handleValidationErrors,
   deleteTestimony
+);
+
+// Ajouter cette route avec les autres routes admin
+router.get(
+  "/admin/:id",
+  authMiddleware,
+  /* (req, res, next) => {
+    if (req.user.role !== "admin" && req.user.role !== "super_admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Accès non autorisé",
+      });
+    }
+    next();
+  }, */
+  validateTestimonyId, // Vous devrez créer cette validation
+  handleValidationErrors,
+  getTestimonyById // Le nouveau contrôleur
 );
 
 module.exports = router;

@@ -360,10 +360,59 @@ const getTestimonyStats = async (req, res) => {
   }
 };
 
+// Admin: Récupérer un témoignage par ID - NOUVEAU
+const getTestimonyById = async (req, res) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({
+        success: false,
+        message: 'ID de témoignage invalide',
+        errors: errors.array()
+      });
+    }
+
+    const { id } = req.params;
+
+    const testimony = await Testimony.findById(id)
+      .populate('approved_by', 'name email');
+
+    if (!testimony) {
+      return res.status(404).json({
+        success: false,
+        message: 'Témoignage non trouvé'
+      });
+    }
+
+    // Transformer les chemins d'images en URLs complètes
+    const testimonyObj = testimony.toObject();
+    if (testimonyObj.images && testimonyObj.images.length > 0) {
+      testimonyObj.images = testimonyObj.images.map(image => {
+        if (image.startsWith('/uploads/')) {
+          return `${req.protocol}://${req.get('host')}${image}`;
+        }
+        return image;
+      });
+    }
+
+    res.json({
+      success: true,
+      data: testimonyObj
+    });
+  } catch (error) {
+    console.error('Erreur récupération témoignage par ID:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Erreur serveur lors de la récupération du témoignage'
+    });
+  }
+};
+
 module.exports = {
   submitTestimony,
   getApprovedTestimonies,
   getAllTestimonies,
+  getTestimonyById,
   updateTestimonyStatus,
   deleteTestimony,
   getTestimonyStats
