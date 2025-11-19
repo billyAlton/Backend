@@ -53,16 +53,16 @@ router.put(
 // === ROUTES ADMIN ===
 router.get(
   '/admin',
- /*  authMiddleware,
+  authMiddleware,
   (req, res, next) => {
-    if (req.user.role !== 'admin' && req.user.role !== 'super_admin') {
+    if (req.user.role !== 'admin' && req.user.role !== 'master_admin') {
       return res.status(403).json({
         success: false,
         message: 'Accès non autorisé'
       });
     }
     next();
-  }, */
+  },
   validateResourceQuery,
   handleValidationErrors,
   getAllResources
@@ -124,7 +124,7 @@ router.get(
   '/admin/stats',
   authMiddleware,
   (req, res, next) => {
-    if (req.user.role !== 'admin' && req.user.role !== 'super_admin') {
+    if (req.user.role !== 'admin' && req.user.role !== 'master_admin') {
       return res.status(403).json({
         success: false,
         message: 'Accès non autorisé'

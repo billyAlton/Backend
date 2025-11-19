@@ -70,8 +70,7 @@ const getResourceById = async (req, res) => {
     const { id } = req.params;
 
     const resource = await Resource.findOne({ 
-      _id: id, 
-      is_published: true 
+      _id: id 
     }).select('-__v');
 
     if (!resource) {
