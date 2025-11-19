@@ -27,19 +27,19 @@ class PrayerRequestController {
       const { id } = req.params;
 
       // Vérifier si l'utilisateur est authentifié
-      if (!req.user || !req.user.id) {
+      /* if (!req.user || !req.user.id) {
         return res.status(401).json({
           success: false,
           message: 'Non authentifié',
         });
-      }
+      } */
 
       // Créer la demande de prière
       const prayerRequest = new PrayerRequest({
         title,
         description,
         requester_name: is_anonymous ? null : (requester_name || null),
-        requester_id: req.user.email,
+        requester_id: req.user?.email,
         status: status || 'active',
         is_anonymous: is_anonymous || false,
         is_public: is_public !== undefined ? is_public : true,

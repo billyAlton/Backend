@@ -8,12 +8,13 @@ const authMiddleware = require('../middleware/auth');
 // Routes publiques
 router.get('/prayer-requests/public', prayerRequestController.getPublicPrayerRequests);
 router.patch('/prayer-requests/:id/pray', prayerRequestController.incrementPrayerCount);
+router.post('/prayer-requests', prayerRequestValidation.create, prayerRequestController.createPrayerRequest);
 
 // Routes protégées
 router.use(authMiddleware);
 
 // CRUD des demandes de prière
-router.post('/prayer-requests', prayerRequestValidation.create, prayerRequestController.createPrayerRequest);
+
 router.get('/prayer-requests', prayerRequestController.getAllPrayerRequests);
 router.get('/prayer-requests/:id', prayerRequestController.getPrayerRequestById);
 router.put('/prayer-requests/:id', prayerRequestValidation.update, prayerRequestController.updatePrayerRequest);

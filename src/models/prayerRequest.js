@@ -20,7 +20,7 @@ const prayerRequestSchema = new mongoose.Schema({
   },
   requester_id: {
     type: String,
-    required: [true, 'L\'ID du demandeur est requis'],
+    required: [false, 'L\'ID du demandeur est requis'],
     ref: 'User'
   },
   status: {
