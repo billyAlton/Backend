@@ -54,7 +54,7 @@ router.put(
 router.get(
   '/admin',
   authMiddleware,
-  (req, res, next) => {
+  /* (req, res, next) => {
     if (req.user.role !== 'admin' && req.user.role !== 'master_admin') {
       return res.status(403).json({
         success: false,
@@ -62,7 +62,7 @@ router.get(
       });
     }
     next();
-  },
+  }, */
   validateResourceQuery,
   handleValidationErrors,
   getAllResources
