@@ -42,9 +42,10 @@ const validateResource = [
     .withMessage('Le nombre de pages doit être un nombre positif'),
 
   body('duration')
-    .optional()
-    .matches(/^([0-9]{1,2}:)?[0-9]{1,2}:[0-9]{1,2}$/)
-    .withMessage('Format de durée invalide (HH:MM:SS ou MM:SS)'),
+  .optional({ checkFalsy: true }) // Permet les valeurs null, undefined, ''
+  .if(body('duration').notEmpty()) // Ne valide le format que si le champ n'est pas vide
+  .matches(/^([0-9]{1,2}:)?[0-9]{1,2}:[0-9]{1,2}$/)
+  .withMessage('Format de durée invalide (HH:MM:SS ou MM:SS)'),
 
   body('artist')
     .optional()

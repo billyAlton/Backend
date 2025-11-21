@@ -39,11 +39,13 @@ const resourceSchema = new mongoose.Schema({
   },
   pages: {
     type: Number,
-    min: 0
+    min: 0,
+     required : false,
   },
   duration: {
     type: String, // Pour les audio/vidéo
-    trim: true
+    trim: true,
+    required : false,
   },
   artist: {
     type: String,
