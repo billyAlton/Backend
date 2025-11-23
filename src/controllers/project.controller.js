@@ -70,8 +70,7 @@ const getProjectById = async (req, res) => {
     const { id } = req.params;
 
     const project = await Project.findOne({ 
-      _id: id, 
-      is_published: true 
+      _id: id
     }).select('-__v');
 
     if (!project) {
