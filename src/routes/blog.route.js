@@ -8,6 +8,7 @@ const authMiddleware = require('../middleware/auth');
 // Routes publiques
 router.get('/blog/posts/published', BlogController.getPublishedBlogPosts);
 router.get('/blog/posts/slug/:slug', BlogController.getBlogPostBySlug);
+router.get('/blog/posts/:id', BlogController.getBlogPostById);
 
 // Routes protégées
 router.use(authMiddleware);
@@ -15,7 +16,6 @@ router.use(authMiddleware);
 // CRUD des articles de blog
 router.post('/blog/posts', blogPostValidation.create, BlogController.createBlogPost);
 router.get('/blog/posts', BlogController.getAllBlogPosts);
-router.get('/blog/posts/:id', BlogController.getBlogPostById);
 router.put('/blog/posts/:id', blogPostValidation.update, BlogController.updateBlogPost);
 router.delete('/blog/posts/:id', BlogController.deleteBlogPost);
 

@@ -123,7 +123,7 @@ class BlogController {
       }
 
       // Vérifier les permissions (seul l'auteur ou un admin peut modifier)
-      if (blogPost.author.toString() !== req.user.email && !req.user.isAdmin) {
+      if (blogPost.author.toString() !== req.user.email && req.user.role !== "master_admin") {
         return res.status(403).json({
           success: false,
           message: 'Non autorisé à modifier cet article',
@@ -287,13 +287,12 @@ class BlogController {
     }
   }
 
-  // 🟣 Récupérer un article par slug
+  //  Récupérer un article par slug
   async getBlogPostBySlug(req, res) {
     try {
       const { slug } = req.params;
       
-      const blogPost = await BlogPost.findOne({ slug })
-        .populate('author_id', 'name email');
+      const blogPost = await BlogPost.findOne({ slug });
 
       if (!blogPost) {
         return res.status(404).json({
@@ -384,7 +383,6 @@ class BlogController {
       if (tag) filter.tags = { $in: [tag] };
 
       const blogPosts = await BlogPost.find(filter)
-        .populate('author_id', 'name email')
         .sort(sort)
         .limit(limit * 1)
         .skip((page - 1) * limit);
