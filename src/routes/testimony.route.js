@@ -6,7 +6,8 @@ const {
   getAllTestimonies,
   updateTestimonyStatus,
   deleteTestimony,
-  getTestimonyStats,getTestimonyById,
+  getTestimonyStats,
+  getTestimonyById,
 } = require("../controllers/testimony.controller");
 const authMiddleware = require("../middleware/auth");
 const uploadTestimony = require("../middleware/uploadTestimony");
@@ -17,6 +18,8 @@ const {
   validateAdminQueryParams,
   validateTestimonyId,
   handleValidationErrors,
+  checkAndConsumeClientToken,
+  isValidClientToken,
 } = require("../middleware/testimonyValidation");
 
 const router = express.Router();
@@ -27,6 +30,54 @@ router.post(
   uploadTestimony.array("images", 3),
   validateTestimonySubmission,
   handleValidationErrors,
+  // token check middleware (inline) -> verifies clientToken before submitTestimony
+  async (req, res, next) => {
+    try {
+      // extract clientToken depending on parser
+      const token =
+        (req.body && req.body.clientToken) ||
+        (req.fields && req.fields.clientToken);
+      const clientIp =
+        req.ip ||
+        req.headers["x-forwarded-for"] ||
+        (req.connection && req.connection.remoteAddress);
+
+      if (!token) {
+        return res
+          .status(400)
+          .json({ success: false, message: "clientToken missing" });
+      }
+
+      const tokenCheck = await checkAndConsumeClientToken(token, clientIp);
+      if (!tokenCheck.ok) {
+        if (tokenCheck.reason === "invalid_token") {
+          return res
+            .status(400)
+            .json({ success: false, message: "Invalid client token" });
+        }
+        if (tokenCheck.reason === "rate_limited") {
+          return res
+            .status(429)
+            .json({
+              success: false,
+              message: "Too many submissions with this token",
+            });
+        }
+        return res
+          .status(500)
+          .json({ success: false, message: "Token validation error" });
+      }
+
+      // attach tokenCheck info for controller if needed
+      req.clientTokenInfo = tokenCheck;
+      next();
+    } catch (err) {
+      console.error("Token check error:", err);
+      return res
+        .status(500)
+        .json({ success: false, message: "Token validation error" });
+    }
+  },
   submitTestimony
 );
 
