@@ -103,6 +103,7 @@ class PrayerRequestController {
           message: 'Demande de prière non trouvée',
         });
       }
+      console.log(prayerRequest);
 
       // Vérifier les permissions (seul le créateur ou un admin peut modifier)
       if (prayerRequest.requester_id.toString() !== req.user.email && !req.user.isAdmin) {
