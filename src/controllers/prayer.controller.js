@@ -106,7 +106,7 @@ class PrayerRequestController {
       console.log(prayerRequest);
 
       // Vérifier les permissions (seul le créateur ou un admin peut modifier)
-      if (prayerRequest.requester_id.toString() !== req.user.email && !req.user.isAdmin) {
+      if (req.user.role !== 'master_admin' && req.user.role !== 'super_admin') {
         return res.status(403).json({
           success: false,
           message: 'Non autorisé à modifier cette demande de prière',
