@@ -21,7 +21,9 @@ const blogRoutes = require('./src/routes/blog.route');
 const donationRoutes = require('./src/routes/donation.route');
 const memberRoutes = require('./src/routes/member.route');
 const testimonyRoutes = require('./src/routes/testimony.route');
-
+const resourceRoutes = require('./src/routes/resource.route');
+const projectRoutes = require('./src/routes/project.route');
+const galleryRoutes = require('./src/routes/gallery.route');
 
 app.use("/api/events", eventRoutes);
 app.use("/api/sermons", sermonRoutes);
@@ -30,6 +32,10 @@ app.use("/api/blogs", blogRoutes);
 app.use("/api/donations", donationRoutes);
 app.use("/api/members", memberRoutes);
 app.use('/api/testimonies', testimonyRoutes);
+app.use('/api/resources', resourceRoutes);
+app.use('/api/projects', projectRoutes);
+app.use('/api/gallery', galleryRoutes);
+
 
 
 // Exemple de route

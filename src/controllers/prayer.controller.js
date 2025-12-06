@@ -27,19 +27,19 @@ class PrayerRequestController {
       const { id } = req.params;
 
       // Vérifier si l'utilisateur est authentifié
-      if (!req.user || !req.user.id) {
+      /* if (!req.user || !req.user.id) {
         return res.status(401).json({
           success: false,
           message: 'Non authentifié',
         });
-      }
+      } */
 
       // Créer la demande de prière
       const prayerRequest = new PrayerRequest({
         title,
         description,
         requester_name: is_anonymous ? null : (requester_name || null),
-        requester_id: req.user.email,
+        requester_id: req.user?.email,
         status: status || 'active',
         is_anonymous: is_anonymous || false,
         is_public: is_public !== undefined ? is_public : true,
@@ -103,9 +103,10 @@ class PrayerRequestController {
           message: 'Demande de prière non trouvée',
         });
       }
+      console.log(prayerRequest);
 
       // Vérifier les permissions (seul le créateur ou un admin peut modifier)
-      if (prayerRequest.requester_id.toString() !== req.user.email && !req.user.isAdmin) {
+      if (req.user.role !== 'master_admin' && req.user.role !== 'super_admin') {
         return res.status(403).json({
           success: false,
           message: 'Non autorisé à modifier cette demande de prière',

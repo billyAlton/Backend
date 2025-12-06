@@ -5,9 +5,7 @@ const fs = require("fs");
 
 // 🟢 Créer un événement
 exports.createEvent = async (req, res) => {
-  console.log("=== BACKEND DEBUG ===");
-  console.log("Body:", req.body);
-  console.log("Files:", req.files);
+
   
   try {
     // Préparer les données

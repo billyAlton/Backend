@@ -67,8 +67,9 @@ const testimonySchema = new mongoose.Schema(
       default: 0,
     },
     approved_by: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      type: String,
+      required : false
+      /* ref: "User", */
     },
     approved_at: {
       type: Date,

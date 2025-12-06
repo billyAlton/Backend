@@ -21,7 +21,7 @@ const authMiddleware = async (req, res, next) => {
     req.user = {
       id: decoded.sub, // L'ID utilisateur Supabase
       email: decoded.email,
-      role: decoded.role
+      role: decoded?.user_metadata?.role,
     };
     
     next();
