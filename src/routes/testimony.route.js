@@ -56,12 +56,10 @@ router.post(
             .json({ success: false, message: "Invalid client token" });
         }
         if (tokenCheck.reason === "rate_limited") {
-          return res
-            .status(429)
-            .json({
-              success: false,
-              message: "Too many submissions with this token",
-            });
+          return res.status(429).json({
+            success: false,
+            message: "Too many submissions with this token",
+          });
         }
         return res
           .status(500)
