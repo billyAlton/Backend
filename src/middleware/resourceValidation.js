@@ -1,109 +1,98 @@
-const { body, param, query, validationResult } = require('express-validator');
+const { body, param, query, validationResult } = require("express-validator");
 
 // Validation pour la création/mise à jour
 const validateResource = [
-  body('title')
+  body("title")
     .trim()
     .notEmpty()
-    .withMessage('Le titre est obligatoire')
+    .withMessage("Le titre est obligatoire")
     .isLength({ max: 200 })
-    .withMessage('Le titre ne peut pas dépasser 200 caractères')
-    .escape(),
-
-  body('description')
+    .withMessage("Le titre ne peut pas dépasser 200 caractères"),
+  body("description")
     .trim()
     .notEmpty()
-    .withMessage('La description est obligatoire')
+    .withMessage("La description est obligatoire")
     .isLength({ max: 1000 })
-    .withMessage('La description ne peut pas dépasser 1000 caractères')
-    .escape(),
+    .withMessage("La description ne peut pas dépasser 1000 caractères"),
+  body("category")
+    .isIn(["book", "brochure", "song", "faq", "other"])
+    .withMessage("Catégorie invalide"),
 
-  body('category')
-    .isIn(['book', 'brochure', 'song', 'faq', 'other'])
-    .withMessage('Catégorie invalide'),
+  body("file_type")
+    .isIn(["pdf", "audio", "video", "text", "image", "none"])
+    .withMessage("Type de fichier invalide"),
 
-  body('file_type')
-    .isIn(['pdf', 'audio', 'video', 'text', 'image', 'none'])
-    .withMessage('Type de fichier invalide'),
+  body("file_url").optional().isURL().withMessage("URL de fichier invalide"),
 
-  body('file_url')
-    .optional()
-    .isURL()
-    .withMessage('URL de fichier invalide'),
-
-  body('file_size')
+  body("file_size")
     .optional()
     .isInt({ min: 0 })
-    .withMessage('La taille du fichier doit être un nombre positif'),
+    .withMessage("La taille du fichier doit être un nombre positif"),
 
-  body('pages')
+  body("pages")
     .optional()
     .isInt({ min: 0 })
-    .withMessage('Le nombre de pages doit être un nombre positif'),
+    .withMessage("Le nombre de pages doit être un nombre positif"),
 
-  body('duration')
-  .optional({ checkFalsy: true }) // Permet les valeurs null, undefined, ''
-  .if(body('duration').notEmpty()) // Ne valide le format que si le champ n'est pas vide
-  .matches(/^([0-9]{1,2}:)?[0-9]{1,2}:[0-9]{1,2}$/)
-  .withMessage('Format de durée invalide (HH:MM:SS ou MM:SS)'),
+  body("duration")
+    .optional({ checkFalsy: true }) // Permet les valeurs null, undefined, ''
+    .if(body("duration").notEmpty()) // Ne valide le format que si le champ n'est pas vide
+    .matches(/^([0-9]{1,2}:)?[0-9]{1,2}:[0-9]{1,2}$/)
+    .withMessage("Format de durée invalide (HH:MM:SS ou MM:SS)"),
 
-  body('artist')
+  body("artist")
     .optional()
     .trim()
     .isLength({ max: 100 })
-    .withMessage("Le nom de l'artiste ne peut pas dépasser 100 caractères")
-    .escape(),
-
-  body('tags')
+    .withMessage("Le nom de l'artiste ne peut pas dépasser 100 caractères"),
+  body("tags")
     .optional()
     .isArray()
-    .withMessage('Les tags doivent être un tableau'),
+    .withMessage("Les tags doivent être un tableau"),
 
-  body('is_published')
+  body("is_published")
     .optional()
     .isBoolean()
-    .withMessage('Le statut de publication doit être un booléen'),
+    .withMessage("Le statut de publication doit être un booléen"),
 
-  body('order')
+  body("order")
     .optional()
     .isInt({ min: 0 })
-    .withMessage("L'ordre doit être un nombre positif")
+    .withMessage("L'ordre doit être un nombre positif"),
 ];
 
 // Validation pour les paramètres de requête
 const validateResourceQuery = [
-  query('category')
+  query("category")
     .optional()
-    .isIn(['book', 'brochure', 'song', 'faq', 'other', 'all'])
-    .withMessage('Catégorie invalide'),
+    .isIn(["book", "brochure", "song", "faq", "other", "all"])
+    .withMessage("Catégorie invalide"),
 
-  query('published')
+  query("published")
     .optional()
-    .isIn(['true', 'false'])
+    .isIn(["true", "false"])
     .withMessage('Le paramètre published doit être "true" ou "false"'),
 
-  query('limit')
+  query("limit")
     .optional()
     .isInt({ min: 1, max: 100 })
-    .withMessage('La limite doit être un nombre entre 1 et 100'),
+    .withMessage("La limite doit être un nombre entre 1 et 100"),
 
-  query('page')
+  query("page")
     .optional()
     .isInt({ min: 1 })
-    .withMessage('La page doit être un nombre positif'),
+    .withMessage("La page doit être un nombre positif"),
 
-  query('search')
+  query("search")
     .optional()
     .trim()
     .isLength({ max: 100 })
-    .withMessage('La recherche ne peut pas dépasser 100 caractères')
+    .withMessage("La recherche ne peut pas dépasser 100 caractères"),
 ];
 
 // Validation pour l'ID
 const validateResourceId = [
-  param('id')
-    .isMongoId()
-    .withMessage('ID de ressource invalide')
+  param("id").isMongoId().withMessage("ID de ressource invalide"),
 ];
 
 // Middleware pour gérer les erreurs de validation
@@ -112,11 +101,11 @@ const handleValidationErrors = (req, res, next) => {
   if (!errors.isEmpty()) {
     return res.status(400).json({
       success: false,
-      message: 'Données de validation invalides',
-      errors: errors.array().map(err => ({
+      message: "Données de validation invalides",
+      errors: errors.array().map((err) => ({
         field: err.param,
-        message: err.msg
-      }))
+        message: err.msg,
+      })),
     });
   }
   next();
@@ -126,5 +115,5 @@ module.exports = {
   validateResource,
   validateResourceQuery,
   validateResourceId,
-  handleValidationErrors
+  handleValidationErrors,
 };

@@ -8,20 +8,20 @@ const validateProject = [
     .withMessage('Le titre est obligatoire')
     .isLength({ max: 200 })
     .withMessage('Le titre ne peut pas dépasser 200 caractères')
-    .escape(),
+    ,
 
   body('description')
     .trim()
     .notEmpty()
     .withMessage('La description est obligatoire')
-    .escape(),
+    ,
 
   body('short_description')
     .optional()
     .trim()
     .isLength({ max: 500 })
     .withMessage('La description courte ne peut pas dépasser 500 caractères')
-    .escape(),
+    ,
 
   body('category')
     .isIn(['construction', 'humanitarian', 'education', 'health', 'spiritual', 'other'])

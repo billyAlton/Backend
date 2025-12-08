@@ -129,7 +129,7 @@ const validateTestimonySubmission = [
     .withMessage("Le titre est obligatoire")
     .isLength({ max: 100 })
     .withMessage("Le titre ne peut pas dépasser 100 caractères")
-    .escape(),
+    ,
 
   body("content")
     .trim()
@@ -137,7 +137,7 @@ const validateTestimonySubmission = [
     .withMessage("Le contenu du témoignage est obligatoire")
     .isLength({ min: 10, max: 2000 })
     .withMessage("Le témoignage doit contenir entre 10 et 2000 caractères")
-    .escape(),
+    ,
 
   body("author_name")
     .trim()
@@ -145,7 +145,7 @@ const validateTestimonySubmission = [
     .withMessage("Le nom est obligatoire")
     .isLength({ max: 50 })
     .withMessage("Le nom ne peut pas dépasser 50 caractères")
-    .escape(),
+    ,
 
   body("author_email")
     .trim()
@@ -160,7 +160,7 @@ const validateTestimonySubmission = [
     .trim()
     .isLength({ max: 50 })
     .withMessage("La localisation ne peut pas dépasser 50 caractères")
-    .escape(),
+    ,
 
   body("category")
     .optional()
