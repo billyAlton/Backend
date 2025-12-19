@@ -131,7 +131,7 @@ class DonationController {
       }
 
       const donations = await Donation.find(filter)
-        .populate('donor_id', 'name email')
+        // .populate('donor_id', 'name email')
         .sort({ createdAt: -1 })
         .limit(limit * 1)
         .skip((page - 1) * limit);
@@ -164,7 +164,7 @@ class DonationController {
       const { id } = req.params;
       
       const donation = await Donation.findById(id)
-        .populate('donor_id', 'name email');
+        // .populate('donor_id', 'name email');
 
       if (!donation) {
         return res.status(404).json({
@@ -271,7 +271,7 @@ class DonationController {
         id,
         updateData,
         { new: true, runValidators: true }
-      ).populate('donor_id', 'name email');
+      );
 
       return res.json({
         success: true,
