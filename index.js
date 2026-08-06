@@ -31,6 +31,7 @@ const testimonyRoutes = require('./src/routes/testimony.route');
 const resourceRoutes = require('./src/routes/resource.route');
 const projectRoutes = require('./src/routes/project.route');
 const galleryRoutes = require('./src/routes/gallery.route');
+const analyticsRoutes = require('./src/routes/analytics.route');
 
 app.use("/api/events", eventRoutes);
 app.use("/api/sermons", sermonRoutes);
@@ -42,6 +43,7 @@ app.use('/api/testimonies', testimonyRoutes);
 app.use('/api/resources', resourceRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/gallery', galleryRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 
 
